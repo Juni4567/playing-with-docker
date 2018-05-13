@@ -1,0 +1,71 @@
+1. download nginex stable version with alpine
+2. run the following command if you are running it for the first time:
+	docker run --name juni-nginx -d -v c:/Users/junai/Desktop/wp_docker/juni-docker:/usr/share/nginx/html:ro -p 80:80 nginx:1.12.2-alpine
+
+	-- If you have already ran this command then pls check if it's running as deamon process because if it's running you can't run it again you'll get an error
+		docker ps (to check if the process is alraedy running) It'll show something like folowing if it's already running 
+
+		$ docker ps
+		CONTAINER ID        IMAGE                 COMMAND                  CREATED             STATUS              PORTS                NAMES
+		2e59f77edc62        nginx:1.12.2-alpine   "nginx -g 'daemon of…"   2 minutes ago       Up 2 minutes        0.0.0.0:80->80/tcp   juni-nginx
+
+	-- If the process is already running then you must run these two commands:
+		-- docker stop juni-nginx
+		-- docker rm juni-nginx
+		-- Now you are able to run the docker run command again with the same juni-nginx name
+
+
+3. Note that you cannot use file paths like mac e.g. If you type pwd in windows command prompt you'll get something like : "c/Users/junai/Desktop/wp_docker/juni-docker" but you need to pass "c:/Users/junai/Desktop/wp_docker/juni-docker" to have it work
+	-- If you pass the first path then you'll get the container running and also it'll create a volume folder for you names something like "juni-docker;C" which does not work even if you change your files in it
+
+	
+Docker volume in windows 10 working great
+	https://gyazo.com/bff09e3ae44a07aa67f5acac2c59ed39
+
+
+
+4. Commands used that must be remebered
+
+	1. Create the docker image
+		docker run --name juni-nginx -d -v c:/Users/junai/Desktop/wp_docker/juni-docker:/usr/share/nginx/html:ro -p 80:80 nginx:1.12.2-alpine
+
+	2. stop running docker image
+		docker stop juni-nginx
+
+	3. remove docker image so that you can re-create it or change the settings (the docker ps for the image must not be running)
+		docker rm juni-nginx
+
+	4. Go inside the container and access the files
+		winpty docker exec -ti juni-nginx ./bin/sh
+
+	5. to see running docker images "docker ps" and to see all docker images that were ever ran "docker ps -a"
+
+	6. To see a list of pulled images from the docker hub "docker image ls"
+
+	7. "ll" or "ls" or "dir" lists all the files in current directory
+
+
+5. IMPORTANT: Keep in mind that when using docker on windows, when you mount a directory to a container you are asked to allow permission to the windows file system and you must enter your user/password to allow that. windows will prompt you when you link a folder to your docker container as volume
+
+
+
+
+
+
+
+############################################
+Next learn how to setup wordpress on docker
+
+
+
+1. Create a netowrk called wp-nwk
+2. create a wordpress docker contianer name it juni-wp and set the --network flag as wp-nwk
+	docker run --name juni-wp -d --network=wp-nwk -p 3005:80 wordpress
+
+3. create a mysql docker container name it juni-mysql and set the --network flag as wp-nwk so it's on the same network as our wordpress is
+
+	docker run --name juni-mysql -e MYSQL_ROOT_PASSWORD=root -d --network=wp-nwk -v c:/Users/junai/Desktop/wp_docker/wp-mysql mysql
+
+
+
+	Set wordpress path as volume to container's : /var/www/html

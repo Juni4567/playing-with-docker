@@ -1,0 +1,10 @@
+web:
+  image: fab/centos
+  ports:
+    - "80:80"
+  volumes:
+    - ./src/httpd.conf:/etc/httpd/conf/httpd.conf
+    - ./src:/var/www/html
+    - ./src/hosts:/etc/hosts
+  environment:
+   - VIRTUAL_HOST=dummy.dev,tests.dev
